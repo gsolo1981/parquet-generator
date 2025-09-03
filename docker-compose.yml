@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  jupyter:
+    build: .
+    container_name: parquet-generator
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./notebooks:/app/notebooks
+      - ./scripts:/app/scripts  
+      - ./output:/app/output
+      - ./.env:/app/.env
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
+      - JUPYTER_TOKEN=parquet123
+    working_dir: /app
+    command: jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token='parquet123'
+    restart: unless-stopped
+    networks:
+      - parquet-net
+
+networks:
+  parquet-net:
+    driver: bridge
